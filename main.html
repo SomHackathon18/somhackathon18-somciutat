@@ -1,0 +1,58 @@
+<style>
+p.SliderTopPadding {
+    padding: 2cm;
+}
+p.SliderImagePadding {
+    padding: 0.5cm 3cm;
+}
+</style>
+<p id="demo"></p>
+<script>
+var text = '{"images":[' +
+'{"name":"carrer1"},' +
+'{"name":"carrer2"}]}';
+
+  obj = JSON.parse(text);
+  
+
+for( i in obj.images) {
+    console.log(obj.images[i].name); 
+}
+var txt = "";
+        for (i in obj.images) {
+			txt += "<p class=/"SliderTopPadding/"></p>
+				<div class=/"slide/">
+					<img src=/"img//"+obj.images[i].name+".jpg/"/>
+						<p class=/"SliderImagePadding/"></p>
+				</div>";
+        }
+        txt += "</table>"        
+        document.getElementById("demo").innerHTML = txt;
+    }
+};
+
+
+</script>
+<div id="carousel">
+  <p class="SliderTopPadding"></p>
+  <div class="slide">
+    <img src="img/carrer1.jpg"/>
+    <p class="SliderImagePadding"></p>
+  </div>
+  <div class="slide">
+    <img src="http://placehold.it/300x150"/>
+    <p class="SliderImagePadding"></p>
+  </div>
+  <div class="slide">
+    <img src="http://placehold.it/300x150"/>
+    <p class="SliderImagePadding"></p>
+  </div>
+  <div class="slide">
+    <img src="http://placehold.it/300x150"/>
+    <p class="SliderImagePadding"></p>
+  </div>
+  <div class="slide">
+    <img src="http://placehold.it/300x150"/>
+    <p class="SliderImagePadding"></p>
+  </div>
+</div>
