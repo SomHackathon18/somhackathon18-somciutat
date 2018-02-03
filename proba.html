@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+  <p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Location</button>
+
+<p id="demo"></p>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+	var map = null;
+	
+      function initMap() {
+		navigator.geolocation.getCurrentPosition
+        var uluru = {lat: -25.363, lng: 131.044};
+        map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 4,
+			center: uluru
+        });
+        var marker = new google.maps.Marker({
+			position: uluru,
+			map: map
+        });
+      }
+	  
+		var x = document.getElementById("demo");
+		
+		
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition);
+			} else {
+				x.innerHTML = "Geolocation is not supported by this browser.";
+			}
+		}
+		function showPosition(position) {
+			x.innerHTML = "Latitude: " + position.coords.latitude + 
+			"<br>Longitude: " + position.coords.longitude; 		
+			addMarker(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
+		}
+		
+		function addMarker(location) {
+			marker = new google.maps.Marker({
+				position: location,
+				map: map 
+			});
+    }
+		
+		    // Standard google maps function
+ /*   function initialize() {
+        var myLatlng = new google.maps.LatLng(40.779502, -73.967857);
+        var myOptions = {
+            zoom: 12,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(document.getElementById("map"), myOptions);
+        TestMarker();
+    }*/
+
+    // Function for adding a marker to the page.
+
+
+    // Testing the addMarker function
+    function TestMarker() {
+           CentralPark = new google.maps.LatLng(37.7699298, -122.4469157);
+           addMarker(CentralPark);
+    }
+		
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8A-ApUZ2zWWVXgPnDwjom6tmwpeBjSek&callback=initMap">
+    </script>
+  </body>
+</html>
