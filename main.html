@@ -13,20 +13,17 @@ var text = '{"images":[' +
 '{"name":"carrer2"}]}';
 
   obj = JSON.parse(text);
-  
+
 
 for( i in obj.images) {
-    console.log(obj.images[i].name); 
+    console.log(obj.images[i].name);
 }
 var txt = "";
         for (i in obj.images) {
-			txt += "<p class=/"SliderTopPadding/"></p>
-				<div class=/"slide/">
-					<img src=/"img//"+obj.images[i].name+".jpg/"/>
-						<p class=/"SliderImagePadding/"></p>
-				</div>";
+			       txt += '<p class="SliderTopPadding"></p><div class="slide"><img src="img/"' +
+             obj.images[i].name + '".jpg/"/><p class=/"SliderImagePadding/"></p></div>"';
         }
-        txt += "</table>"        
+        txt += "</table>"
         document.getElementById("demo").innerHTML = txt;
     }
 };
@@ -55,4 +52,4 @@ var txt = "";
     <img src="http://placehold.it/300x150"/>
     <p class="SliderImagePadding"></p>
   </div>
-</div>
+</div>mai
