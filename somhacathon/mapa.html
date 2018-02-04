@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <a href="file:///C:/Users/sergi/Desktop/somhacathon/main.html">Inici</a></br></br>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBxonecnrYLhP4rH_u_OIxMURFKqzMVWo4",
+        authDomain: "my-project-1517652764919.firebaseapp.com",
+        databaseURL: "https://my-project-1517652764919.firebaseio.com",
+        projectId: "my-project-1517652764919",
+        storageBucket: "gs://my-project-1517652764919.appspot.com",
+        messagingSenderId: "803508591655"
+      };
+      firebase.initializeApp(config);
+      </script>
+    <img id="output">
+    <script>
+      const output = document.getElementById('output');
+      function doSomethingWithFiles(fileList) {
+        let file = null;
+        for (let i = 0; i < fileList.length; i++) {
+          if (fileList[i].type.match(/^image\//)) {
+            file = fileList[i];
+            break;
+          }
+        }
+        if (file !== null) {
+          output.src = URL.createObjectURL(file);
+          var metadata = {
+            contentType: 'image/jpeg'
+          };
+          var storageRef = firebase.storage().ref();
+          // Create a reference to 'mountains.jpg'
+            var mountainsRef = storageRef.child(file.name+'.jpg');
+
+          // Create a reference to 'images/mountains.jpg'
+            var mountainImagesRef = storageRef.child('images/'+file.name+'.jpg');
+          var uploadTask = storageRef.child(file.name).put(file, metadata);
+          // Listen for state changes, errors, and completion of the upload.
+          uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+          function(snapshot) {
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+              case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+            }
+          }, function(error) {
+            switch (error.code) {
+              case 'storage/unauthorized':
+              // User doesn't have permission to access the object
+              break;
+              case 'storage/canceled':
+              // User canceled the upload
+              break;
+              case 'storage/unknown':
+                // Unknown error occurred, inspect error.serverResponse
+              break;
+            }
+          }, function() {
+        // Upload completed successfully, now we can get the download URL
+        var downloadURL = uploadTask.snapshot.downloadURL;
+        var get_username = document.getElementById("username").value;
+        var get_title = document.getElementById("title").value;
+        var get_description = document.getElementById("description").value;
+        var id =3;
+
+       writeUserData(id,downloadURL,get_username,get_title,get_description);
+
+        setTimeout(function(){
+           window.location.replace("file:///C:/Users/sergi/Desktop/somhacathon/main.html");
+        }, 2000);
+});
+        }
+      }
+
+
+
+
+
+      function writeUserData(userId,image, name, title,description) {
+        //userId = getId();
+        //console.log(userId);
+        firebase.database().ref('/users/' + userId ).set({
+            userName: name,
+            imagePath: image,
+            titleInstance: title,
+            descInstance: description
+        });
+      //   firebase.database().ref('/size_users').set({
+      //     size_users: userId+1
+      //   });
+       }
+      function getId(){
+        var query = firebase.database().ref("size_users");
+        query.once("value").then(function(snapshot) {
+              // key will be "ada" the first time and "alan" the second time
+              var key = snapshot.val();
+              console.log(key);
+          return key;
+              // childData will be the actual contents of the child
+              // var childData = childSnapshot.val();
+        });
+      }
+
+    </script>
+    <input type="file" accept="image/*" id="Copy">
+    <script>
+      const fileInput = document.getElementById('Copy');
+      fileInput.addEventListener('change', (e) => doSomethingWithFiles(e.target.files));
+    </script>
+
+
+  <p>Click Location to add an instance</p>
+  <form action="/action_page.php">
+    username:<br>
+    <input type="text" id="username" value="">
+    <br>
+    Title:<br>
+    <input type="text" id="title" value="">
+    <br>
+    Description:<br>
+    <input type="text" id="description" value="">
+  </form>
+<button onclick="getLocation()">Location</button>
+
+<p id="demo"></p>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+	var map = null;
+
+      function initMap() {
+        var uluru = {lat: 41.527464, lng: 2.427610};
+        map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 12,
+			center: {lat: 41.527464, lng: 2.427610}
+        });
+        var marker = new google.maps.Marker({
+			position: uluru,
+			map: map
+        });
+        var marker2 = new google.maps.Marker({
+      position: {lat: 41.529375, lng: 2.435301} ,
+      map: map
+        });
+        var marker3 = new google.maps.Marker({
+      position: {lat: 41.530162, lng: 2.432252},
+      map: map
+        });
+      }
+
+		var x = document.getElementById("demo");
+
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition);
+			} else {
+				x.innerHTML = "Geolocation is not supported by this browser.";
+			}
+		}
+		function showPosition(position) {
+			x.innerHTML = "Latitude: " + position.coords.latitude +
+			"<br>Longitude: " + position.coords.longitude;
+			addMarker(new google.maps.LatLng(position.coords.latitude,position.coords.longitude));
+		}
+
+		function addMarker(location) {
+			marker = new google.maps.Marker({
+				position: location,
+				map: map
+			});
+    }
+
+    // Testing the addMarker function
+    function TestMarker() {
+           CentralPark = new google.maps.LatLng(37.7699298, -122.4469157);
+           addMarker(CentralPark);
+    }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8A-ApUZ2zWWVXgPnDwjom6tmwpeBjSek&callback=initMap">
+    </script>
+
+  </body>
+</html>

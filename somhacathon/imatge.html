@@ -1,0 +1,23 @@
+
+
+<img id="output">
+<script>
+  const output = document.getElementById('output');
+  function doSomethingWithFiles(fileList) {
+    let file = null;
+    for (let i = 0; i < fileList.length; i++) {
+      if (fileList[i].type.match(/^image\//)) {
+        file = fileList[i];
+        break;
+      }
+    }
+    if (file !== null) {
+      output.src = URL.createObjectURL(file);
+    }
+  }
+</script>
+<input type="file" accept="image/*" id="Copy">
+<script>
+  const fileInput = document.getElementById('Copy');
+  fileInput.addEventListener('change', (e) => doSomethingWithFiles(e.target.files));
+</script>

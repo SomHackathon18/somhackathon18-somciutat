@@ -1,0 +1,64 @@
+<style>
+p.SliderTopPadding {
+    padding: 2cm;
+}
+p.SliderImagePadding {
+    padding: 0.5cm 3cm;
+}
+</style>
+<a href="file:///C:/Users/sergi/Desktop/somhacathon/mapa.html">Mapa</a>
+<p id="demo"></p>
+
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBxonecnrYLhP4rH_u_OIxMURFKqzMVWo4",
+    authDomain: "my-project-1517652764919.firebaseapp.com",
+    databaseURL: "https://my-project-1517652764919.firebaseio.com",
+    projectId: "my-project-1517652764919",
+    storageBucket: "",
+    messagingSenderId: "803508591655"
+  };
+  firebase.initializeApp(config);
+
+  function writeUserData(userId,image, name, title,description) {
+    firebase.database().ref('/users/' + userId ).set({
+        userName: name,
+        imagePath: image,
+        titleInstance: title,
+        descInstance: description
+    });
+  }
+
+  function getUserById(id){
+     var txt = "";
+      var query = firebase.database().ref("users").orderByKey();
+      query.once("value").then(function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+            // key will be "ada" the first time and "alan" the second time
+            var key = childSnapshot.key;
+            // childData will be the actual contents of the child
+            var childData = childSnapshot.val();
+            console.log(childData.userName);
+            txt += "<p>"+childData.userName+"</p> <p>"+childData.titleInstance+"</p>";
+            txt += "<img src="+childData.imagePath+">";
+            txt += '<p></p> <button type="button">Validar</button>  <button type="button">Refutar</button>';
+            document.getElementById("demo").innerHTML = txt;
+        });
+      });
+    }
+  getUserById("1");
+  //writeUserData("1","https://firebasestorage.googleapis.com/v0/b/my-project-1517652764919.appspot.com/o/carrer2.jpg?alt=media&token=74d3f9bc-6b07-405d-827f-373d50b4caa2","Paco","This is a title","This is a description");
+</script>
+<script>
+  var config = {
+    // ...
+  };
+  firebase.initializeApp(config);
+</script>
